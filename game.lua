@@ -1130,7 +1130,31 @@ function Game.Rule:OnUpdate(time)
 	end
 end
 
+KZ.LanServer = nil
+KZ.LanServerStack = 0
+KZ.LanServerTime = nil
+LanServer = SyncValueCreate('LanServer')
+
 function Game.Rule:OnPlayerSignal(player, signal)
+	-- 서버 형태 검증 로직
+	if KZ.LanServer == nil then
+		local lt = Game.GetTime()
+		if KZ.LanServerTime == nil then
+			KZ.LanServerTime = lt
+		elseif KZ.LanServerTime == lt then
+			-- 데디서버
+			KZ.LanServer = false
+			LanServer.value = false
+		else
+			KZ.LanServerStack = KZ.LanServerStack + 1
+			KZ.LanServerTime = lt
+			if KZ.LanServerStack >= 10 then
+				-- 랜서버
+				KZ.LanServer = true
+				LanServer.value = true
+			end
+		end
+	end
 	if signal < 0 then
 		KZ.Event[signal](player)
 	elseif signal >= 2000000000 then -- Save

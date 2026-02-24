@@ -7,8 +7,10 @@ print(version)
 KZ = {}
 Animation = Module.Animation:New()
 
+
 local SyncValueCreate = SyncValueSet(UI)
 
+LanServer = SyncValueCreate('LanServer')
 function TextOffSet(place, value, negative)
 	return bool_to_number(place == 'bottom' or place == 'right', value, negative)
 end
@@ -3046,9 +3048,14 @@ function KZ.Event:getQR(time)
 	local mapIndex = KZ_MAP_INDEX
 	local cp = KZ.Player.cp[KZ.Index]
 	local gc = KZ.Player.gc[KZ.Index]
-	local plain = string.format("%s.%s.%s.%d.%d", mapIndex, nickName, time, cp, gc)
-	local enc = strEncrypt(plain, "20260215")
-	local url = string.format("%s/submit/%s", getBaseURL(), enc)
+	local plain = string.format("%s.%s.%s.%d.%d,%d", mapIndex, nickName, time, cp, gc, KZ.WeaponModeIndex)
+	local enc = strEncrypt(plain, "20260224")
+	local url = ""
+	if LanServer.value == true then
+		url = string.format("%s/submit/%s", getBaseURL(), "LAN")
+	else
+		url = string.format("%s/submit/%s", getBaseURL(), enc)
+	end
 	local record = timeToStr((tonumber(time) or 0) / 100)
 
 	return KZ.Event:CreateQRCodeByBox(url, {
