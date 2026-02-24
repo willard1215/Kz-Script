@@ -1,0 +1,4 @@
+{
+  "game" : [ "configs.lua", "mpbhop.lua", "WeaponBlock.lua", "surfBlocks.lua", "game.lua" ],
+  "ui" : [ "rc6.lua", "configs.lua", "logo.lua", "qrencode.lua", "module.ui.lua", "ui.lua" ]
+}
